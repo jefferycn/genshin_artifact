@@ -1,6 +1,6 @@
 {
   "name": "genshin_artifacts",
-  "version": "4.10.1",
+  "version": "4.12.0",
   "private": true,
   "scripts": {
     "serve": "cross-env MONA_TITLE=莫娜占卜铺 MONA_NEED_BEIAN=false MONA_NEED_MIGRATE=false MONA_ROUTE_MODE=hash vue-cli-service serve",
@@ -44,6 +44,7 @@
     "imagemin": "^7.0.1",
     "imagemin-jpegtran": "^7.0.0",
     "imagemin-pngquant": "^9.0.2",
+    "mustache": "^4.2.0",
     "node-html-parser": "^3.2.0",
     "sass": "^1.32.10",
     "sass-loader": "^10.1.1",
