@@ -14,7 +14,7 @@ function getBonus(attribute, element, skill) {
 // get damage, given character level(for defense ratio), enemy, baseDmg
 // note that baseDmg will be plused by attribute base bonus
 // for example, weapon 不灭月华 will add base attack by hp percentage
-// dmg: base damage
+// dmg: extra base damage, base damage bonused by weapon is calculated from attribude
 export function damageDelegate(attribute, cLevel, dmg, enemy, element, skill, extraBonus = []) {
     const defensiveRatio = enemy.getDR(cLevel, attribute.enemyDefDown ?? 0);
 
@@ -24,7 +24,18 @@ export function damageDelegate(attribute, cLevel, dmg, enemy, element, skill, ex
     
     const damageBonus = 1 + getBonus(attribute, element, skill) + extraBonus.reduce((a, b) => a + b, 0);
 
-    const baseDmg = dmg + attribute["lifeRatio"] * attribute.life();
+    let baseDmg = dmg;
+    if (skill === "a") {
+        baseDmg += attribute.getNormalAttackBaseDamage(0);
+    } else if (skill === "b") {
+        baseDmg += attribute.getChargedAttackBaseDamage(0);
+    } else if (skill === "air") {
+        baseDmg += attribute.getPlungingAttackBaseDamage(0);
+    } else if (skill === "e") {
+        baseDmg += attribute.getElementalSkillBaseDamage(0);
+    } else if (skill === "q") {
+        baseDmg += attribute.getElementalBurstBaseDamage(0);
+    }
 
     const dmgWithoutCrit = baseDmg * defensiveRatio * resRatio * damageBonus;
 
@@ -90,6 +101,7 @@ export function damageReactionCustom(type, attribute, cLevel, enemy, element, sk
 }
 
 // skillName: a, b, air, e, q
+// deprecated
 export function colNormal(attribute, configObject, enemy, rowConfigs, skillName, element, as=skillName) {
     let c = configObject.character;
 
@@ -125,6 +137,7 @@ export function colNormal(attribute, configObject, enemy, rowConfigs, skillName,
     return ret;
 }
 
+// deprecated
 export function colReaction(type, attribute, configObject, enemy, skillKeys, skillId, element, as=skillId) {
     let c = configObject.character;
 
@@ -180,6 +193,7 @@ export function tableFire(attribute, configObject, enemy, rowConfigs, skillName)
     return ret;
 }
 
+// deprecated
 export function tableFireCustom(attribute, configObject, enemy, rowConfigs, skillName, baseDmg,
     {extraBonus = []} = {}) {
     let rows = [];
@@ -199,6 +213,7 @@ export function tableFireCustom(attribute, configObject, enemy, rowConfigs, skil
     return rows;
 }
 
+// deprecated
 export function tableIce(attribute, configObject, enemy, rowConfigs, skillName) {
     return mergeArray(
         ["chs", rowConfigs.map(item => item.chs)],
@@ -207,6 +222,7 @@ export function tableIce(attribute, configObject, enemy, rowConfigs, skillName) 
     );
 }
 
+// deprecated
 export function tableThunder(attribute, configObject, enemy, rowConfigs, skillName) {
     return mergeArray(
         ["chs", rowConfigs.map(item => item.chs)],
@@ -230,6 +246,7 @@ export function rowWater(attribute, configObject, enemy, caption, skillName, bas
     }
 } 
 
+// deprecated
 export function tableWater(attribute, configObject, enemy, rowConfigs, skillName, as=skillName) {
     return mergeArray(
         ["chs", rowConfigs.map(item => item.chs)],
@@ -238,6 +255,7 @@ export function tableWater(attribute, configObject, enemy, rowConfigs, skillName
     );
 }
 
+// deprecated
 export function tableWind(attribute, configObject, enemy, rowConfigs, skillName, as=skillName) {
     return mergeArray(
         ["chs", rowConfigs.map(item => item.chs)],
@@ -245,6 +263,7 @@ export function tableWind(attribute, configObject, enemy, rowConfigs, skillName,
     )
 }
 
+// deprecated
 export function tableRock(attribute, configObject, enemy, rowConfigs, skillName, as=skillName) {
     return mergeArray(
         ["chs", rowConfigs.map(item => item.chs)],
@@ -260,6 +279,7 @@ export function rowRock(attribute, configObject, enemy, caption, skillName, base
     }
 }
 
+// deprecated
 export function tableRockCustom(attribute, configObject, enemy, rowConfigs, skillName, baseDmg,
     { extraBonus = [] } = {})
 {
@@ -278,6 +298,7 @@ export function tableRockCustom(attribute, configObject, enemy, rowConfigs, skil
     return rows;
 }
 
+// deprecated
 export function tablePhysical(attribute, configObject, enemy, rowConfigs, skillName) {
     let ret =  mergeArray(
         ["chs", rowConfigs.map(item => item.chs)],
