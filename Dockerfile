@@ -1,6 +1,6 @@
-FROM node:14.15.4
+FROM node:14.18.2
 WORKDIR /app
 RUN npm install -g serve
-COPY dist dist
+VOLUME /app/dist
 CMD serve ./dist
 EXPOSE 3000
